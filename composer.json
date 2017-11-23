@@ -1,0 +1,31 @@
+{
+    "name": "ratenkaufbyeasycredit/module-api",
+    "type": "library",
+    "description": "ratenkauf by easyCredit SDK (PHP)",
+	"version": "1.0.0",
+    "keywords": [
+        "ratenkauf by easycredit",
+        "ratenkauf",
+        "payment",
+        "payments",
+        "teambank",
+        "easycredit",
+        "ratenzahlung",
+		"ratenkauf"
+    ],
+    "license": "Apache OSL-2",
+    "authors": [
+        {
+            "name": "NETZKOLLEKTIV GmbH",
+            "email": "kontakt@netzkollektiv.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Netzkollektiv\\EasyCreditApi\\": "src/"
+        }
+    },
+    "require": {
+      "php": ">=5.2.0"
+    }
+}
