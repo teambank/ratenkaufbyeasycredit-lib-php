@@ -1,5 +1,5 @@
 {
-    "name": "ratenkaufbyeasycredit/module-api",
+    "name": "ratenkaufbyeasycredit/php-sdk",
     "type": "library",
     "description": "ratenkauf by easyCredit SDK (PHP)",
 	"version": "1.0.0",
