@@ -9,6 +9,8 @@ interface CustomerInterface {
     public function getEmail();
     public function getDob();
 
+    public function getCompany();
+
 	public function getTelephone();
 
     public function isLoggedIn();

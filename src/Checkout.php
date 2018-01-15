@@ -1,7 +1,7 @@
 <?php
 namespace Netzkollektiv\EasyCreditApi;
 
-class Checkout {
+class Checkout implements CheckoutInterface {
 
     public function __construct(Client $client, StorageInterface $storage) {
         $this->_api = $client;
@@ -44,7 +44,7 @@ class Checkout {
         try {
             $this->_getToken();
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -191,6 +191,31 @@ class Checkout {
         return (count($diff) === 0);
     }
 
+    public function isAvailable(Rest\QuoteInterface $quote) {
+
+        if (!$this->getIsCustomerSameAsBilling($quote)) {
+            throw new \Exception('Zur Zahlung mit ratenkauf by easyCredit, müssen der Rechnungsempfänger und der Inhaber des Kundenkontos identisch sein.
+                Bitte ändern Sie den Namen des Rechnungsempfängers entsprechend ab.');
+        }
+
+        if (!$this->sameAddresses($quote)) {
+            throw new \Exception('Zur Zahlung mit ratenkauf by easyCredit muss die Rechnungsadresse mit der Lieferadresse übereinstimmen.');
+        }
+
+        $company = $quote->getCustomer()->getCompany();
+        if (trim($company) != '') {
+            throw new \Exception('ratenkauf by easyCredit ist nur für Privatpersonen möglich.');
+        }
+
+        try {
+            $this->getInstallmentValues($quote->getGrandTotal());
+        } catch (\Exception $e) {
+            $msg = str_replace('ratenkauf by easyCredit:','',$e->getMessage());
+            throw new \Exception($msg);
+        }
+        return true;
+    }
+
     public function isAmountValid(Rest\QuoteInterface $quote) {
         $amount = (float) $quote->getGrandTotal();
         $authorizedAmount = (float) $this->_storage->get('authorized_amount');
@@ -204,6 +229,10 @@ class Checkout {
             return false;
         }
         return true;
+    }
+
+    public function isPrefixValid($prefix) {
+        return ($this->_api->convertCustomerPrefix($prefix) !== '');
     }
 
     public function clear() {

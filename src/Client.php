@@ -233,7 +233,7 @@ class Client
             ),
             'laufzeit' => 36,
             'personendaten' => array(
-                'anrede' => $this->_convertCustomerPrefix($customer->getPrefix()),
+                'anrede' => $this->convertCustomerPrefix($customer->getPrefix()),
                 'vorname' => $customer->getFirstname(),
                 'nachname' => $customer->getLastname(),
                 'geburtsdatum' => $this->_getFormattedDate($customer->getDob())
@@ -337,7 +337,7 @@ class Client
         return $_address;
     }
 
-    protected function _convertCustomerPrefix($prefix)
+    public function convertCustomerPrefix($prefix)
     {
         foreach ($this->_customerPrefixMalePatterns as $pattern) {
             if (stripos($prefix, $pattern) !== false) {
@@ -349,7 +349,6 @@ class Client
                 return 'FRAU';
             }
         }
-
         return "";
     }
 }
