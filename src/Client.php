@@ -66,7 +66,7 @@ class Client
             $this->_call('GET', 'webshop/' . $apiKey .'/restbetragankaufobergrenze', 
                 array(), $apiKey, $apiToken
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
 
@@ -166,8 +166,23 @@ class Client
                     break;
                 default:
                     $this->_logger->logError($devMessage);
-
-                    throw new \Exception('ratenkauf by easyCredit: '.$userMessage);
+                   
+                    $key = str_replace('AdressdatenValidierenUndNormierenServiceActivityMsg.','',$message->key); 
+                    if (in_array($key,array(
+                        'Errors.ADRESSE_ERNEUT_EINGEBEN_VERBOTENE_ZEICHEN_VERWENDET',
+                        'Errors.ADRESSE_UNBEKANNT',
+                        'Errors.ADRESSE_MEHRDEUTIG',
+                        'Errors.STRASSE_HNR_NICHT_ANGEGEBEN',
+                        'Errors.STRASSE_HNR_HNR_FEHLT',
+                        'Errors.STRASSE_HNR_POSTFACH',
+                        'Errors.PLZ_NICHT_ANGEGEBEN',
+                        'Errors.ORT_NICHT_ANGEGEBEN',
+                        'Errors.LIEFERADRESSE_FEHLERHAFT',
+                        'Errors.PATTERN_VALIDATION',
+                    )) !== false) {
+                        throw new AddressException($userMessage);
+                    }
+                    throw new Exception('ratenkauf by easyCredit: '.$userMessage);
             }
         }
         unset($result->wsMessages);
@@ -175,7 +190,7 @@ class Client
 
     protected function _throw($msg) {
         $this->_logger->log($msg);
-        throw new \Exception($msg);
+        throw new Exception($msg);
     }
 
     protected function _getFormattedDate($date)
@@ -224,7 +239,7 @@ class Client
         
         return array_filter(array(
             'shopKennung' => $this->_config->getWebshopId(),
-            'vorgangskennungShop' => $quote->getId(),
+            'vorgangskennungShop' => is_string($quote->getId()) ? substr($quote->getId(),0,50) : $quote->getId(),
             'bestellwert' => $quote->getGrandTotal(),
             'ruecksprungadressen' => array(
                 'urlAbbruch' => $cancelUrl,
@@ -299,10 +314,19 @@ class Client
             );
 
             $_item['produktkategorie'] = $item->getCategory();
-            $_item['artikelnummern'][] = array(
-                'nummerntyp' => 'magento-sku',
-                'nummer' => $item->getSku()
-            );
+
+            $skus = $item->getSku();
+            if (!is_array($skus)) {
+                $skus = array('sku' => $skus); 
+            }
+
+            $_item['artikelnummern'] = array();
+            foreach ($skus as $key => $value) {
+                $_item['artikelnummern'][] = array(
+                    'nummerntyp' => $key,
+                    'nummer' => $value
+                );
+            }
 
             $_items[] = array_filter($_item);
         }
