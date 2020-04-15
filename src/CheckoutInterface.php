@@ -13,7 +13,7 @@ interface CheckoutInterface {
     public function isInitialized();
     public function isApproved();
     public function loadFinancingInformation();
-    public function capture($token = null);
+    public function capture($token = null, $orderId = null);
     public function getInstallmentValues($amount);
     public function getAgreement();
     public function verifyCredentials($apiKey, $apiToken);

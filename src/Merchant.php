@@ -25,26 +25,37 @@ class Merchant
         return $this->_config;
     }
 
-    public function search($search = null, $status = null, \DateTime $from = null, \DateTime $to = null) {
-        $data = array_filter(array(
-            'suche'        => $search,
-            'status'     => $status,
-            'von'         => ($from !== null) ? $from->format('Y-m-d') : null,
-            'bis'         => ($to !== null) ? $to->format('Y-m-d') : null
-        ),'strlen');
+    public function getTransaction($search) {
 
-        if (null !== $status && !in_array($data['status'],$this->_availableStatus)) {
-            throw new Exception('status '.$data['status'].' does not exist to filter transactions');
-        }
+        $result = $this->_call('GET','transaktionen/'.$search);
 
-        // use v0, because filter in v2 is not working properly
-        $result = $this->_call('GET','https://app.easycredit.de/haendlerinterface-ws/rest/v0/haendlerinterface/suchen',$data);
-        
         if (!isset($result->ergebnisse)) {
             return array();
         }
         return $result->ergebnisse;
     }
+
+    /**
+     * @deprecated
+     *
+     * @return $this
+     */
+    public function search($search) {
+        trigger_error('Deprecated function search, please use getTransaction($search)', E_USER_DEPRECATED);
+
+        return $this->getTransaction($search);
+    }
+
+    public function searchTransactions($params = array()) {
+
+        $result = $this->_call('GET','transaktionen/suchen',$params);
+
+        if (!isset($result->ergebnisse)) {
+            return array();
+        }
+        return $result->ergebnisse;
+    }
+
     public function confirmShipment($transactionId, \DateTime $shipmentDate = null) {
         $data = array_filter(array(
            'datum'    => ($shipmentDate !== null) ? $shipmentDate->format('Y-m-d') : null
@@ -76,8 +87,6 @@ class Merchant
         
         $method = strtoupper($method);
 
-        $this->_logger->logDebug($data);
-
         $client = $this->_clientFactory->getClient($url, array(
             'keepalive' => true
         ));
@@ -104,21 +113,19 @@ class Merchant
         }
 
         $response = $client->request($method);
-        $result = $response->getBody();
+        $result = json_decode($response->getBody());
 
-        if (empty($result)) {
-            $this->_throw('easyCredit API: returned an empty result');
-        }
-
-        $result = json_decode($result);
-        $this->_logger->logDebug($result);
+        $this->_logger->logDebug(array(
+            'request' => $client->getLastRequest(),
+            'response' => $client->getLastResponse(),
+            'responseBody' => $response->getBody()
+        ));
 
         if ($result == null) {
             $this->_throw('easyCredit API: result could not be parsed or is null');
         }
 
         if (isset($result->wsMessages)) {
-            $this->_logger->logDebug($result->wsMessages);
             $this->_handleMessages($result);
         }
 

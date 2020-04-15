@@ -82,10 +82,6 @@ class Checkout implements CheckoutInterface {
             'pre_contract_information_url',
             (string)$result->allgemeineVorgangsdaten->urlVorvertraglicheInformationen
         );
-        $this->_storage->set(
-            'redemption_plan',
-            (string)$result->tilgungsplanText
-        );
 
         /* get financing info from api */
         $result = $this->_api->callFinancing(
@@ -101,12 +97,12 @@ class Checkout implements CheckoutInterface {
         );
     }
 
-    public function capture($token = null) {
+    public function capture($token = null, $orderId = null) {
         if (is_null($token)) {
             $token = $this->_getToken();
         }
 
-        $this->_api->callConfirm($token);
+        $this->_api->callConfirm($token, $orderId);
 
         $this->_storage->set(
             'is_captured', 1

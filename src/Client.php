@@ -53,8 +53,14 @@ class Client
         return $this->_call('GET','vorgang/'.$token.'/finanzierung');
     }
 
-    public function callConfirm($token) {
-        return $this->_call('POST','vorgang/'.$token.'/bestaetigen');
+    public function callConfirm($token, $orderId = null) {
+        $data = array();
+        if ($orderId !== null) {
+            $data = array(
+                'shopVorgangskennung' => $orderId
+            );
+        }
+        return $this->_call('POST','vorgang/'.$token.'/bestaetigen', $data);
     }
 
     public function callAgreement() {
@@ -85,7 +91,7 @@ class Client
         $url = $this->_config->getApiUrl($resource);
         $method = strtoupper($method);
 
-        $this->_logger->logDebug($data);
+        $this->_logger->logDebug(array($method, $url,$data));
 
         $client = $this->_clientFactory->getClient($url, array(
             'keepalive' => true
