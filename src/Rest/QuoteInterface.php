@@ -5,6 +5,7 @@ interface QuoteInterface {
 
 	public function getId();
 	public function getShippingMethod();
+    public function getIsClickAndCollect();
 
     public function getGrandTotal();
 

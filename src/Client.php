@@ -288,8 +288,12 @@ class Client
             'anzahlProdukteImWarenkorb' => count($quote->getItems())
         );
 
-        if (trim($quote->getShippingMethod() != '')) {
-            $details['logistikDienstleister'] = $quote->getShippingMethod();
+        if (trim($quote->getShippingMethod()) != '') {
+            $method = $quote->getShippingMethod();
+            if ($quote->getIsClickAndCollect()) {
+                $method = '[Selbstabholung] ' . $method;
+            }
+            $details['logistikDienstleister'] = substr($method, 0, 255);
         }
 
         if ($quote->getCustomer()->isLoggedIn()) {
