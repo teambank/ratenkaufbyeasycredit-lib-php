@@ -252,7 +252,7 @@ class Client
                 'urlErfolg' => $returnUrl,
                 'urlAblehnung' => $rejectUrl
             ),
-            'laufzeit' => 36,
+            'laufzeit' => $quote->getDuration(),
             'personendaten' => array(
                 'anrede' => $this->convertCustomerPrefix($customer->getPrefix()),
                 'vorname' => $customer->getFirstname(),

@@ -7,6 +7,7 @@ interface QuoteInterface {
 	public function getShippingMethod();
     public function getIsClickAndCollect();
 
+    public function getDuration();
     public function getGrandTotal();
 
     public function getBillingAddress();

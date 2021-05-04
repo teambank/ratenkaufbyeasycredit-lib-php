@@ -93,7 +93,7 @@ class Checkout implements CheckoutInterface {
             (float)$result->ratenplan->zinsen->anfallendeZinsen
         )->set(
             'payment_plan',
-            $this->_formatPaymentPlan($result->ratenplan->zahlungsplan)
+            json_encode($result->ratenplan->zahlungsplan)
         );
     }
 
