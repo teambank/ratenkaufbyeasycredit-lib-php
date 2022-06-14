@@ -152,11 +152,11 @@ class Checkout implements CheckoutInterface {
             return true;
         }
 
-        if (trim($quote->getCustomer()->getFirstname()) != trim($quote->getBillingAddress()->getFirstname()) ) {
+        if (trim((string)$quote->getCustomer()->getFirstname()) != trim((string)$quote->getBillingAddress()->getFirstname()) ) {
             return false;
         }
 
-        if (trim($quote->getCustomer()->getLastname()) != trim($quote->getBillingAddress()->getLastname()) ) {
+        if (trim((string)$quote->getCustomer()->getLastname()) != trim((string)$quote->getBillingAddress()->getLastname()) ) {
             return false;
         }
 
@@ -199,7 +199,7 @@ class Checkout implements CheckoutInterface {
         }
 
         $company = $quote->getCustomer()->getCompany();
-        if (trim($company) != '') {
+        if (trim((string)$company) != '') {
             throw new AddressException('ratenkauf by easyCredit ist nur für Privatpersonen möglich.');
         }
 

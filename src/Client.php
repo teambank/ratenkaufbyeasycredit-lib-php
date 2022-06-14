@@ -163,7 +163,7 @@ class Client
                 $userMessage.= ' ('.$message->field.')';
             }
 
-            switch (trim($message->severity)) {
+            switch (trim((string)$message->severity)) {
                 case 'INFO':
                     $this->_logger->logInfo($devMessage);
                     break;
@@ -201,7 +201,7 @@ class Client
 
     protected function _getFormattedDate($date)
     {
-        return (strtotime($date) !== false) ? date('Y-m-d', strtotime($date)) : null;
+        return (strtotime((string)$date) !== false) ? date('Y-m-d', strtotime((string)$date)) : null;
     }
 
     protected function _getRequestContext($method, $postData = null) {
@@ -288,7 +288,7 @@ class Client
             'anzahlProdukteImWarenkorb' => count($quote->getItems())
         );
 
-        if (trim($quote->getShippingMethod()) != '') {
+        if (trim((string)$quote->getShippingMethod()) != '') {
             $method = $quote->getShippingMethod();
             if ($quote->getIsClickAndCollect()) {
                 $method = '[Selbstabholung] ' . $method;
@@ -376,12 +376,12 @@ class Client
     public function convertCustomerPrefix($prefix)
     {
         foreach ($this->_customerPrefixMalePatterns as $pattern) {
-            if (stripos($prefix, $pattern) !== false) {
+            if (stripos((string)$prefix, $pattern) !== false) {
                 return 'HERR';
             }
         }
         foreach ($this->_customerPrefixFemalePatterns as $pattern) {
-            if (stripos($prefix, $pattern) !== false) {
+            if (stripos((string)$prefix, $pattern) !== false) {
                 return 'FRAU';
             }
         }

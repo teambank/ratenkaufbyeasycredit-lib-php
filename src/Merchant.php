@@ -161,7 +161,7 @@ class Merchant
                 $userMessage.= ' ('.$message->field.')';
             }
 
-            switch (trim($message->severity)) {
+            switch (trim((string)$message->severity)) {
                 case 'INFO':
                     $this->_logger->logInfo($devMessage);
                     break;
