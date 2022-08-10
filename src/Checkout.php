@@ -213,14 +213,16 @@ class Checkout implements CheckoutInterface {
     }
 
     public function isAmountValid(Rest\QuoteInterface $quote) {
-        $amount = (float) $quote->getGrandTotal();
-        $authorizedAmount = (float) $this->_storage->get('authorized_amount');
-        $interestAmount = (float) $this->_storage->get('interest_amount');
+
+        $amount = $quote->getGrandTotal();
+        $authorizedAmount = $this->_storage->get('authorized_amount');
+        $interestAmount = $this->_storage->get('interest_amount');
 
         if (
-            $authorizedAmount > 0
-            && $interestAmount > 0
-            && round($amount, 2) != round($authorizedAmount + $interestAmount, 2)
+            $amount === null ||
+            $authorizedAmount === null ||
+            $interestAmount === null ||
+            round((float) $amount, 2) !== round((float) $authorizedAmount + (float) $interestAmount, 2)
         ) {
             return false;
         }
