@@ -1,6 +1,6 @@
-# ratenkauf by easyCredit PHP SDK (unofficial)
+# easyCredit-Ratenkauf PHP SDK (unofficial)
 
-The PHP SDK is a simplified and purpose oriented library for integration of ratenkauf by easyCredit. It is used in the following e-commerce plugins:
+The PHP SDK is a simplified and purpose oriented library for integration of easyCredit-Ratenkauf. It is used in the following e-commerce plugins:
 
 * Magento 1
 * Magento 2
@@ -8,9 +8,9 @@ The PHP SDK is a simplified and purpose oriented library for integration of rate
 * Shopware 6
 * wooCommerce
 
-**This is not the official PHP library including all features of ratenkauf by easyCredit API v2.**
+**This is not the official PHP library including all features of easyCredit-Ratenkauf API v2.**
 For the official PHP library have a look at the following website:
-https://www.easycredit-ratenkauf.de/system/eigenintegration/
+https://developer.easycredit-ratenkauf.de/
 
 # Usage / Integration
 

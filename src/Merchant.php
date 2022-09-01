@@ -171,7 +171,7 @@ class Merchant
                 default:
                     $this->_logger->logError($devMessage);
 
-                    throw new \Exception('ratenkauf by easyCredit: '.$userMessage);
+                    throw new \Exception('easyCredit-Ratenkauf: '.$userMessage);
             }
         }
         unset($result->wsMessages);

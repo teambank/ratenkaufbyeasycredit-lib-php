@@ -188,7 +188,7 @@ class Client
                     )) !== false) {
                         throw new AddressException($userMessage);
                     }
-                    throw new Exception('ratenkauf by easyCredit: '.$userMessage);
+                    throw new Exception('easyCredit-Ratenkauf: '.$userMessage);
             }
         }
         unset($result->wsMessages);

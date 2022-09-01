@@ -190,23 +190,23 @@ class Checkout implements CheckoutInterface {
     public function isAvailable(Rest\QuoteInterface $quote) {
 
         if (!$this->getIsCustomerSameAsBilling($quote)) {
-            throw new Exception('Zur Zahlung mit ratenkauf by easyCredit, müssen der Rechnungsempfänger und der Inhaber des Kundenkontos identisch sein.
+            throw new Exception('Zur Zahlung mit easyCredit-Ratenkauf, müssen der Rechnungsempfänger und der Inhaber des Kundenkontos identisch sein.
                 Bitte ändern Sie den Namen des Rechnungsempfängers entsprechend ab.');
         }
 
         if (!$this->sameAddresses($quote)) {
-            throw new AddressException('Zur Zahlung mit ratenkauf by easyCredit muss die Rechnungsadresse mit der Lieferadresse übereinstimmen.');
+            throw new AddressException('Zur Zahlung mit easyCredit-Ratenkauf muss die Rechnungsadresse mit der Lieferadresse übereinstimmen.');
         }
 
         $company = $quote->getCustomer()->getCompany();
         if (trim((string)$company) != '') {
-            throw new AddressException('ratenkauf by easyCredit ist nur für Privatpersonen möglich.');
+            throw new AddressException('easyCredit-Ratenkauf ist nur für Privatpersonen möglich.');
         }
 
         try {
             $this->getInstallmentValues($quote->getGrandTotal());
         } catch (\Exception $e) {
-            $msg = str_replace('ratenkauf by easyCredit:','',$e->getMessage());
+            $msg = str_replace('easyCredit-Ratenkauf:','',$e->getMessage());
             throw new Exception($msg);
         }
         return true;

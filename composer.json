@@ -1,10 +1,10 @@
 {
     "name": "ratenkaufbyeasycredit/php-sdk",
     "type": "library",
-    "description": "ratenkauf by easyCredit SDK (PHP)",
-    "version": "1.6.1",
+    "description": "easyCredit-Ratenkauf SDK (PHP)",
+    "version": "1.6.3",
     "keywords": [
-        "ratenkauf by easycredit",
+        "easycredit-ratenkauf",
         "ratenkauf",
         "payment",
         "payments",
